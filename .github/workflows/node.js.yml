@@ -4,7 +4,7 @@ name: Daily Report
 
 on:
  schedule:
- - cron: "56 01 * * *"
+ - cron: "00 05 * * *"
  workflow_dispatch:
  
 env:
