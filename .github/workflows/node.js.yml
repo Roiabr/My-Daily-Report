@@ -4,12 +4,13 @@ name: Daily Report
 
 on:
  schedule:
- - cron: "0 14 * * *"
+ - cron: "00 05 * * *"
  workflow_dispatch:
  
 env:
   MAIL_USER_EMAIL: ${{ secrets.MAIL_USER_EMAIL}}
   MAIL_USER_PASSWORD: ${{ secrets.MAIL_USER_PASSWORD}}
+  ACCUWEATHER_API_KEY: ${{ secrets.ACCUWEATHER_API_KEY }}
 
 jobs:
   report:
