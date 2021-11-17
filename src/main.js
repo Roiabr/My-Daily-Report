@@ -27,7 +27,7 @@ const nodemailer = require("nodemailer");
     secure: true, // true for 465, false for other ports
     auth: {
       user: process.env.MAIL_USER_EMAIL,
-      pass: process.env.MAIL_USER_PASSWORDs,
+      pass: process.env.MAIL_USER_PASSWORD,
     },
   });
 
