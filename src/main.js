@@ -21,6 +21,14 @@ const nodemailer = require("nodemailer");
 
   //   console.log(ForecastData);
 
+  const ShabbatRequest = await fetch(
+    `https://www.hebcal.com/shabbat?cfg=json&geonameid=294421&a=on`
+  );
+  const ShabbatData = await ShabbatRequest.json();
+  const parasha = ShabbatData.items.filter(lightFilter)[0].memo;
+  const candle_lighting = ShabbatData.items.filter(lightFilter)[0].title;
+  Havdalah = ShabbatData.items.filter(lightFilter)[1].title;
+
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -30,17 +38,40 @@ const nodemailer = require("nodemailer");
       pass: process.env.MAIL_USER_PASSWORD,
     },
   });
-
-  await transporter.sendMail({
-    from: '"Daily Report 👻" <Daliy@Report.com>', // sender address
-    to: "roiabr15@gmail.com", // list of receivers
-    subject: "Weather Daily Report  ✔", // Subject line
-    text: "Weather Daily Report ", // plain text body
-    html: `
-        <h1>Weather Daily Report </h1>
-        <p>Forecast: ${ForecastData.Headline.Text}</p>
-        <p>Min: ${temp.Minimum.Value} ℃</p>
-        <p>Max: ${temp.Maximum.Value} ℃</p>
-    `,
-  });
+  const d = new Date();
+  if (d.getDay() != 5) {
+    await transporter.sendMail({
+      from: '"Daily Report 👻" <Daliy@Report.com>', // sender address
+      to: "roiabr15@gmail.com", // list of receivers
+      subject: "Weather Daily Report  ✔", // Subject line
+      text: "Weather Daily Report ", // plain text body
+      html: `
+          <h1>Weather Daily Report </h1>
+          <p>Forecast: ${ForecastData.Headline.Text}</p>
+          <p>Min: ${temp.Minimum.Value} ℃</p>
+          <p>Max: ${temp.Maximum.Value} ℃</p>
+      `,
+    });
+  } else {
+    await transporter.sendMail({
+      from: '"Daily Report 👻" <Daliy@Report.com>', // sender address
+      to: "roiabr15@gmail.com", // list of receivers
+      subject: "Weather Daily Report  ✔", // Subject line
+      text: "Weather Daily Report ", // plain text body
+      html: `
+          <h1>Weather Daily Report </h1>
+          <p>Forecast: ${ForecastData.Headline.Text}</p>
+          <p>Min: ${temp.Minimum.Value} ℃</p>
+          <p>Max: ${temp.Maximum.Value} ℃</p>
+          <p> ${parasha}</p>
+          <p> ${candle_lighting}</p>
+          <p> ${Havdalah} </p>
+      `,
+    });
+  }
 })();
+function lightFilter(item) {
+  if (item.title_orig === "Candle lighting" || item.title_orig === "Havdalah")
+    return true;
+  return false;
+}
