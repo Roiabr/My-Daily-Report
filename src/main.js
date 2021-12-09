@@ -50,6 +50,7 @@ const nodemailer = require("nodemailer");
           <p>Forecast: ${ForecastData.Headline.Text}</p>
           <p>Min: ${temp.Minimum.Value} ℃</p>
           <p>Max: ${temp.Maximum.Value} ℃</p>
+          <p>Max: ${d.getDay()} ℃</p>
       `,
     });
   } else {
